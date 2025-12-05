@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   base: '/xbtheme/', // GitHub Pages 仓库名
   build: {
-    outDir: 'public', // 输出到 public 目录
+    outDir: 'docs', // 输出到 docs 目录 (GitHub Pages 支持)
     emptyOutDir: true,
   },
 })
