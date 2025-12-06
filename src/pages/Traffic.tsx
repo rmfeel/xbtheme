@@ -156,25 +156,37 @@ const Traffic: React.FC = () => {
                     <Space size={4}><span style={{ width: 12, height: 12, background: '#52c41a', borderRadius: 2 }} />上传流量</Space>
                 </Space>
             }>
-                <div style={{ height: 256, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, paddingBottom: 8, borderBottom: '1px solid #f0f0f0', position: 'relative' }}>
-                    {/* Grid Lines */}
-                    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', pointerEvents: 'none' }}>
-                        {[...Array(5)].map((_, i) => (
-                            <div key={i} style={{ borderTop: '1px dashed #f0f0f0', width: '100%', height: 0 }} />
+                <div style={{ overflowX: 'auto', paddingBottom: 8 }}>
+                    <div style={{
+                        height: 256,
+                        display: 'flex',
+                        alignItems: 'flex-end',
+                        justifyContent: 'space-between',
+                        gap: 16,
+                        paddingBottom: 8,
+                        borderBottom: '1px solid #f0f0f0',
+                        position: 'relative',
+                        minWidth: 500 // Ensure chart has enough width to scroll on small screens
+                    }}>
+                        {/* Grid Lines */}
+                        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', pointerEvents: 'none' }}>
+                            {[...Array(5)].map((_, i) => (
+                                <div key={i} style={{ borderTop: '1px dashed #f0f0f0', width: '100%', height: 0 }} />
+                            ))}
+                        </div>
+
+                        {chartData.map((item, index) => (
+                            <div key={index} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', height: '100%', zIndex: 1, position: 'relative' }}>
+                                <div style={{ width: 40, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 1 }}>
+                                    <div style={{ width: '100%', background: '#1677ff', opacity: 0.9, borderRadius: '2px 2px 0 0', height: item.downHeight, transition: 'all 0.3s' }} />
+                                    <div style={{ width: '100%', background: '#52c41a', opacity: 0.9, borderRadius: '0 0 2px 2px', height: item.upHeight, transition: 'all 0.3s' }} />
+                                </div>
+                                <div style={{ marginTop: 8, fontSize: 12, color: index === chartData.length - 1 ? '#1677ff' : '#8c8c8c', fontWeight: index === chartData.length - 1 ? 'bold' : 'normal' }}>
+                                    {item.date}
+                                </div>
+                            </div>
                         ))}
                     </div>
-
-                    {chartData.map((item, index) => (
-                        <div key={index} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', height: '100%', zIndex: 1, position: 'relative' }}>
-                            <div style={{ width: 40, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 1 }}>
-                                <div style={{ width: '100%', background: '#1677ff', opacity: 0.9, borderRadius: '2px 2px 0 0', height: item.downHeight, transition: 'all 0.3s' }} />
-                                <div style={{ width: '100%', background: '#52c41a', opacity: 0.9, borderRadius: '0 0 2px 2px', height: item.upHeight, transition: 'all 0.3s' }} />
-                            </div>
-                            <div style={{ marginTop: 8, fontSize: 12, color: index === chartData.length - 1 ? '#1677ff' : '#8c8c8c', fontWeight: index === chartData.length - 1 ? 'bold' : 'normal' }}>
-                                {item.date}
-                            </div>
-                        </div>
-                    ))}
                 </div>
             </Card>
 

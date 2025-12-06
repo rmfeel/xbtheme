@@ -293,8 +293,8 @@ const Invite: React.FC = () => {
 
                 <div style={{ padding: '0 24px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
                     <Text strong>记录列表</Text>
-                    <Space>
-                        <Input placeholder="搜索用户/手机号" prefix={<SearchOutlined style={{ color: '#bfbfbf' }} />} style={{ width: 200 }} />
+                    <Space wrap>
+                        <Input placeholder="搜索用户/手机号" prefix={<SearchOutlined style={{ color: '#bfbfbf' }} />} style={{ width: 200, maxWidth: '100%' }} />
                         <Button icon={<FilterOutlined />}>筛选</Button>
                         <Button icon={<ExportOutlined />}>导出</Button>
                     </Space>
@@ -308,6 +308,7 @@ const Invite: React.FC = () => {
                         showTotal: (total) => `共 ${total} 条记录`,
                         defaultPageSize: 10
                     }}
+                    scroll={{ x: 'max-content' }}
                     locale={{ emptyText: <Empty description="暂无邀请记录" /> }}
                 />
             </Card>
