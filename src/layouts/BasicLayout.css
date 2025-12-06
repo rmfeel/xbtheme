@@ -77,30 +77,21 @@
   white-space: nowrap;
 }
 
-.breadcrumb-wrapper {
-  background: #f5f5f5;
-  padding: 16px 0;
-  margin-top: 64px;
-  position: relative;
-  z-index: 100;
-}
 
-.breadcrumb-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
 
 .layout-content {
-  margin-top: -23px;
+  margin-top: 64px;
   min-height: calc(100vh - 64px - 70px);
   background: #f5f5f5;
-  padding: 24px;
+  padding-top: 12px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 24px;
 }
 
 .layout-content>div {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 10px auto;
 }
 
 .layout-footer {
@@ -221,16 +212,17 @@
   }
 
   .layout-content {
-    padding: 16px;
+    padding-top: 12px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
   }
 
   .layout-content>div {
     max-width: 100%;
   }
 
-  .breadcrumb-content {
-    padding: 0 16px;
-  }
+
 }
 
 /* 响应式设计 - 移动端 */
@@ -271,12 +263,13 @@
   }
 
   .layout-content {
-    padding: 12px;
+    padding-top: 12px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 12px;
   }
 
-  .breadcrumb-content {
-    padding: 0 12px;
-  }
+
 
   .footer-nav {
     gap: 12px 16px;
@@ -311,19 +304,11 @@
     top: 56px;
   } */
 
-  .breadcrumb-wrapper {
-    /* margin-top: 56px; */
-    padding: 12px 0;
-  }
-
   .layout-content {
-    margin-top: 0;
-    /* min-height: calc(100vh - 56px - 60px); */
-    padding: 8px;
-  }
-
-  .breadcrumb-content {
-    padding: 0 8px;
+    padding-top: 12px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 8px;
   }
 
   .footer-nav {

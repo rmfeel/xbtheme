@@ -121,7 +121,7 @@ const Plan = () => {
     };
 
     return (
-        <div style={{ paddingTop: 32 }}>
+        <div>
             {/* Header Section */}
             <div style={{ textAlign: 'center', marginBottom: 32 }}>
                 <Title level={2} style={{ marginBottom: 8, fontWeight: 600 }}>

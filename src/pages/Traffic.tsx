@@ -100,7 +100,7 @@ const Traffic: React.FC = () => {
     );
 
     return (
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: 24 }}>
+        <div>
             {/* Header */}
             <PageHeader
                 title="流量使用明细"

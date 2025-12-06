@@ -103,7 +103,7 @@ const GiftCard: React.FC = () => {
     ];
 
     return (
-        <div style={{ maxWidth: 1000, margin: '0 auto', padding: 24 }}>
+        <div>
             {/* Header */}
             <div style={{ marginBottom: 24 }}>
                 <Title level={3} style={{ margin: '0 0 8px 0' }}>礼品卡兑换</Title>
@@ -117,11 +117,13 @@ const GiftCard: React.FC = () => {
                     <Col xs={24} md={16}>
                         <div style={{ marginBottom: 24 }}>
                             <Text strong style={{ display: 'block', marginBottom: 8 }}>请输入兑换码</Text>
-                            <Space size="middle" style={{ display: 'flex' }}>
+                            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
                                 <Input
                                     placeholder="XXXX-XXXX-XXXX-XXXX"
                                     style={{
-                                        width: 320,
+                                        flex: 1,
+                                        minWidth: 200,
+                                        maxWidth: 320,
                                         fontFamily: 'monospace',
                                         textTransform: 'uppercase',
                                         letterSpacing: 1,
@@ -130,7 +132,7 @@ const GiftCard: React.FC = () => {
                                     }}
                                 />
                                 <Button type="primary" size="large" onClick={() => message.success('兑换成功！')}>立即兑换</Button>
-                            </Space>
+                            </div>
                         </div>
 
                         <div style={{ background: '#e6f7ff', border: '1px solid #91caff', borderRadius: 8, padding: 16 }}>

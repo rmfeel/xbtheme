@@ -6,7 +6,7 @@ const { Title, Paragraph, Text, Link } = Typography;
 
 const Doc: React.FC = () => {
     return (
-        <div className="windows-doc-page" style={{ maxWidth: 1200, margin: '0 auto', padding: '24px' }}>
+        <div className="windows-doc-page" style={{ maxWidth: 1200, margin: '0 auto', padding: '10px' }}>
             <Row gutter={24}>
                 {/* Left Column: Article Content */}
                 <Col xs={24} lg={18}>

@@ -177,7 +177,7 @@ const Orders: React.FC = () => {
     ];
 
     return (
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: 24 }}>
+        <div>
             {/* Header */}
             <PageHeader
                 title="我的订单"
@@ -188,12 +188,12 @@ const Orders: React.FC = () => {
                         <Button type="primary" icon={<PlusOutlined />} onClick={() => message.success('跳转至购买页面')}>购买新服务</Button>
                     </Space>
                 }
-                style={{ marginBottom: 24, padding: 0, background: 'transparent' }} // Match previous 'div' style by resetting card bg if needed, or keep standard card look
+                style={{ marginBottom: 24, padding: 0, background: 'transparent', boxShadow: 'none' }} // Match previous 'div' style by resetting card bg if needed, or keep standard card look
             />
 
             {/* Filter */}
             <Card variant="borderless" style={{ marginBottom: 24 }} styles={{ body: { padding: 24 } }}>
-                <Row gutter={24}>
+                <Row gutter={[24, 24]}>
                     <Col xs={24} md={6}>
                         <div style={{ marginBottom: 4 }}><Text style={{ fontSize: 14 }}>订单号</Text></div>
                         <Input placeholder="请输入" style={{ width: '100%' }} />

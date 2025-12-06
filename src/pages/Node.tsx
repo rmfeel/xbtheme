@@ -110,7 +110,7 @@ const Node = () => {
     };
 
     return (
-        <div style={{ paddingTop: 32, maxWidth: 1200, margin: '0 auto' }}>
+        <div>
             {/* Page Header */}
             <PageHeader
                 title="服务状态监控"
@@ -123,7 +123,7 @@ const Node = () => {
                         <Button icon={<ReloadOutlined />} type="text">刷新数据</Button>
                     </Space>
                 }
-                style={{ padding: 0, marginBottom: 32, background: 'transparent' }}
+                style={{ padding: 0, marginBottom: 32, background: 'transparent', boxShadow: 'none' }}
             />
 
             {/* Stats Grid */}
@@ -180,7 +180,7 @@ const Node = () => {
                     <Card
                         key={group.id}
                         variant="borderless"
-                        style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
+                        style={{ boxShadow: 'none' }}
                         styles={{ body: { padding: 0 } }}
                     >
                         {/* Group Header */}

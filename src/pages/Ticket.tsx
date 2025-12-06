@@ -162,10 +162,8 @@ const Ticket = () => {
         },
     ];
 
-
-
     return (
-        <div style={{ paddingTop: 32, maxWidth: 1200, margin: '0 auto' }}>
+        <div>
             {/* Header Section */}
             <PageHeader
                 title="工单管理"
@@ -175,13 +173,11 @@ const Ticket = () => {
                         提交新工单
                     </Button>
                 }
-                style={{ marginBottom: 24, padding: 0 }}
+                style={{ marginBottom: 24, padding: 0, background: 'transparent', boxShadow: 'none' }}
             />
 
-
-
             {/* Table Section */}
-            <Card variant="borderless" style={{ boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)' }} styles={{ body: { padding: 0 } }}>
+            <Card variant="borderless" style={{ boxShadow: 'none', background: 'transparent' }} styles={{ body: { padding: 0 } }}>
                 {/* Filter Bar */}
                 <div style={{ padding: 16, borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
                     <Segmented

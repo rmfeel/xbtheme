@@ -110,7 +110,7 @@ const Profile: React.FC = () => {
     );
 
     return (
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div>
             <Row gutter={24}>
                 {/* Left Column */}
                 <Col xs={24} md={8}>

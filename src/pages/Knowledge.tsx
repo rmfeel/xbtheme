@@ -1,6 +1,5 @@
 import { Typography, Input, Space, Avatar, Tag, Card, Button } from 'antd';
-import { SearchOutlined, EyeOutlined, LikeOutlined, UserOutlined } from '@ant-design/icons';
-import PageHeader from '../components/PageHeader';
+import { EyeOutlined, LikeOutlined, UserOutlined } from '@ant-design/icons';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -54,20 +53,22 @@ const Knowledge = () => {
     ];
 
     return (
-        <div style={{ maxWidth: 1000, margin: '0 auto', padding: '24px 0' }}>
+        <div>
             {/* Header */}
-            <PageHeader
-                title="知识库"
-                subtitle="在这里找到您所有问题的答案。"
-            >
-                <div style={{ maxWidth: 600 }}>
-                    <Input
-                        size="large"
+            <div style={{ textAlign: 'center', margin: '40px 0' }}>
+                <Title level={2} style={{ marginBottom: 16 }}>知识库</Title>
+                <Paragraph type="secondary" style={{ fontSize: 16, marginBottom: 32 }}>
+                    在这里找到您所有问题的答案。
+                </Paragraph>
+                <div style={{ maxWidth: 600, margin: '0 auto' }}>
+                    <Input.Search
                         placeholder="搜索文章..."
-                        prefix={<SearchOutlined style={{ color: 'rgba(0,0,0,0.25)' }} />}
+                        enterButton="搜索"
+                        size="large"
+                        allowClear
                     />
                 </div>
-            </PageHeader>
+            </div>
 
             {/* Article List - Replaced List component with map to fix deprecation warning */}
             <div>

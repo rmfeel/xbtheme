@@ -97,16 +97,16 @@ const Dashboard = () => {
       {
         icon: WindowsOutlined,
         title: 'Windows',
-        description: '“Clash Verge Rev 是唯一的首选',
+        description: '“Clash Verge Rev ，由社区积极维护，更新频率高，能够及时修复 Bug ',
         tag: '管理员',
         time: '8 年前',
         iconBg: '#1677ff',
-        onClick: () => onNavigate?.('windows-doc'),
+        onClick: () => onNavigate?.('doc'),
       },
       {
         icon: AppleOutlined,
         title: 'iOS',
-        description: '希望是一个好东西，也许是最好的，好东西是不会消亡的',
+        description: 'Shadowrocket 界面直观，没有复杂的配置文件概念。通常只需要扫描机场提供的二维码',
         tag: '全组都是吾王',
         time: '8 年前',
         iconBg: '#ff4d4f',
@@ -114,7 +114,7 @@ const Dashboard = () => {
       {
         icon: TabletOutlined,
         title: '安卓',
-        description: '城镇中有那么多的酒馆，她却走进了我的酒馆',
+        description: 'Surfboard (冲浪板) 适合人群： 追求UI美观、耗电低、稳定性高的用户。',
         tag: '中二少女团',
         time: '几秒前',
         iconBg: '#52c41a',
@@ -122,7 +122,7 @@ const Dashboard = () => {
       {
         icon: DesktopOutlined,
         title: 'macOS',
-        description: '那时候我只会想自己想要什么，从不想自己拥有什么',
+        description: '最顺手的免费/开源之选：Clash Verge Rev，如果有其他那就是iOS的生态',
         tag: '程序员日常',
         time: '8 年前',
         iconBg: '#333',
@@ -158,7 +158,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ paddingTop: 32 }}>
+    <div>
       {/* 欢迎区域和余额卡片 */}
       <Row gutter={ROW_GUTTER} style={ROW_MARGIN_BOTTOM}>
         <Col xs={24} lg={16}>
@@ -361,6 +361,7 @@ const Dashboard = () => {
                         cursor: 'pointer',
                         transition: 'all 0.3s',
                         minHeight: '140px',
+                        height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
                         marginLeft: index % 3 === 0 ? 0 : -1,
@@ -393,7 +394,7 @@ const Dashboard = () => {
                             style={{
                               fontSize: 13,
                               display: '-webkit-box',
-                              WebkitLineClamp: 2,
+                              WebkitLineClamp: 3,
                               WebkitBoxOrient: 'vertical',
                               overflow: 'hidden',
                               lineHeight: '1.5',

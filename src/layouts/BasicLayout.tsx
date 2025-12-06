@@ -1,6 +1,6 @@
-import { useMemo, ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Layout, Menu, Avatar, Dropdown, Space, Button, Breadcrumb } from 'antd';
+import { Layout, Menu, Avatar, Dropdown, Space, Button } from 'antd';
 import type { MenuProps } from 'antd';
 import {
   DashboardOutlined,
@@ -29,6 +29,11 @@ const BasicLayout = ({ children }: BasicLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   const currentPage = (location.pathname.substring(1) || 'dashboard') as MenuKey;
 
   const onPageChange = (key: MenuKey) => {
@@ -37,11 +42,6 @@ const BasicLayout = ({ children }: BasicLayoutProps) => {
   };
 
   const userMenuItems: MenuProps['items'] = [
-    {
-      key: 'profile',
-      icon: <UserOutlined />,
-      label: '个人中心',
-    },
     {
       key: 'settings',
       icon: <SettingOutlined />,
@@ -99,35 +99,7 @@ const BasicLayout = ({ children }: BasicLayoutProps) => {
     },
   ];
 
-  const menuMap: Record<MenuKey, string> = {
-    dashboard: '仪表盘',
-    plan: '购买订阅',
-    node: '节点列表',
-    ticket: '工单',
-    doc: '使用文档',
-    knowledge: '知识库',
-    invite: '邀请返佣',
-    profile: '个人中心',
-    traffic: '流量明细',
-    orders: '我的订单',
-    giftcard: '礼品卡',
-  };
 
-  const breadcrumbItems = useMemo(() => {
-    const items = [
-      {
-        title: <a href="#" onClick={(e) => { e.preventDefault(); onPageChange('dashboard'); }}>首页</a>,
-      },
-    ];
-
-    if (currentPage !== 'dashboard' && menuMap[currentPage]) {
-      items.push({
-        title: <span>{menuMap[currentPage]}</span>,
-      });
-    }
-
-    return items;
-  }, [currentPage]);
 
   return (
     <Layout className="basic-layout">
@@ -243,11 +215,7 @@ const BasicLayout = ({ children }: BasicLayoutProps) => {
         </div>
       </div>
 
-      <div className="breadcrumb-wrapper">
-        <div className="breadcrumb-content">
-          <Breadcrumb items={breadcrumbItems} />
-        </div>
-      </div>
+
 
       <Content className="layout-content">
         {children}
