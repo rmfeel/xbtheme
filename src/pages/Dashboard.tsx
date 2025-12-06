@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Row, Col, Progress, Button, Space, Typography, Avatar, Popconfirm, Tooltip, Tag } from 'antd';
+import { Card, Row, Col, Progress, Button, Space, Typography, Avatar, Popconfirm, Tooltip, Tag, Grid } from 'antd';
 import type { CSSProperties } from 'react';
 import {
   CloudFilled,
@@ -23,6 +23,7 @@ import {
 import ImportModal from '../components/ImportModal';
 
 const { Title, Text } = Typography;
+const { useBreakpoint } = Grid;
 
 // 类型定义
 interface PlatformItem {
@@ -59,12 +60,16 @@ const ROW_MARGIN_BOTTOM: CSSProperties = { marginBottom: 16 };
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const screens = useBreakpoint();
 
   const onNavigate = (key: string) => {
     navigate(`/${key}`);
   };
   const [hitokoto, setHitokoto] = useState<string>(':D 获取中...');
   const [isWindowsModalOpen, setIsWindowsModalOpen] = useState(false);
+
+  // 响应式列数
+  const docGridColumns = screens.lg ? 3 : screens.sm ? 2 : 1;
 
   // 获取一言
   useEffect(() => {
@@ -345,78 +350,72 @@ const Dashboard = () => {
           <Card
             title={<><BookFilled style={{ marginRight: 8 }} />使用文档</>}
             extra={<a href="#" style={{ fontSize: 13 }}>全部教程</a>}
-            style={CARD_STYLE}
-            styles={{ body: { padding: 0 } }}
+            style={{ ...CARD_STYLE, height: '100%', display: 'flex', flexDirection: 'column' }}
+            styles={{ body: { padding: 0, flex: 1, display: 'flex', flexDirection: 'column' } }}
           >
-            <Row gutter={[0, 0]}>
-              {docItems.map((item, index) => {
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: `repeat(${docGridColumns}, 1fr)`,
+                gridTemplateRows: docGridColumns === 1 ? 'auto' : 'repeat(2, 1fr)',
+                flex: 1,
+              }}
+            >
+              {docItems.slice(0, 6).map((item, index) => {
                 const IconComponent = item.icon;
                 return (
-                  <Col xs={24} sm={12} lg={8} key={index}>
-                    <div
-                      style={{
-                        padding: 0,
-                        border: '1px solid #f0f0f0',
-                        borderRadius: 0,
-                        cursor: 'pointer',
-                        transition: 'all 0.3s',
-                        minHeight: '140px',
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        marginLeft: index % 3 === 0 ? 0 : -1,
-                        marginTop: index >= 3 ? -1 : 0,
-                      }}
-                      onClick={item.onClick}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
-                        e.currentTarget.style.borderColor = '#d9d9d9';
-                        e.currentTarget.style.zIndex = '1';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.boxShadow = 'none';
-                        e.currentTarget.style.borderColor = '#f0f0f0';
-                        e.currentTarget.style.zIndex = '0';
-                      }}
-                    >
-                      <Space size={12} align="start" style={{ padding: '16px', width: '100%' }}>
-                        <Avatar
-                          size={40}
-                          icon={<IconComponent />}
-                          style={{ backgroundColor: item.iconBg, flexShrink: 0 }}
-                        />
-                        <Space orientation="vertical" size={4} style={{ flex: 1, minWidth: 0 }}>
-                          <Text strong style={{ fontSize: 14 }}>
-                            {item.title}
-                          </Text>
-                          <Text
-                            type="secondary"
-                            style={{
-                              fontSize: 13,
-                              display: '-webkit-box',
-                              WebkitLineClamp: 3,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden',
-                              lineHeight: '1.5',
-                            }}
-                          >
-                            {item.description}
-                          </Text>
-                          <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
-                            <Text type="secondary" style={{ fontSize: 12 }}>
-                              {item.tag}
-                            </Text>
-                            <Text type="secondary" style={{ fontSize: 12 }}>
-                              {item.time}
-                            </Text>
-                          </div>
-                        </Space>
-                      </Space>
+                  <div
+                    key={index}
+                    style={{
+                      padding: '16px',
+                      border: '1px solid #f0f0f0',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: 12,
+                      marginLeft: index % docGridColumns === 0 ? 0 : -1,
+                      marginTop: index >= docGridColumns ? -1 : 0,
+                    }}
+                    onClick={item.onClick}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+                      e.currentTarget.style.borderColor = '#d9d9d9';
+                      e.currentTarget.style.zIndex = '1';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = 'none';
+                      e.currentTarget.style.borderColor = '#f0f0f0';
+                      e.currentTarget.style.zIndex = '0';
+                    }}
+                  >
+                    <Avatar
+                      size={40}
+                      icon={<IconComponent />}
+                      style={{ backgroundColor: item.iconBg, flexShrink: 0 }}
+                    />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <Text strong style={{ fontSize: 14, display: 'block', marginBottom: 4 }}>
+                        {item.title}
+                      </Text>
+                      <Text
+                        type="secondary"
+                        style={{
+                          fontSize: 13,
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                          lineHeight: '1.5',
+                        }}
+                      >
+                        {item.description}
+                      </Text>
                     </div>
-                  </Col>
+                  </div>
                 );
               })}
-            </Row>
+            </div>
           </Card>
         </Col>
       </Row>
