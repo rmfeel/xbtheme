@@ -14,6 +14,8 @@ import Profile from './pages/Profile';
 import Traffic from './pages/Traffic';
 import Orders from './pages/Orders';
 import GiftCard from './pages/GiftCard';
+import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
 
 
 
@@ -31,6 +33,8 @@ function App() {
       <BrowserRouter basename="/xbtheme">
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route
             path="/*"
             element={

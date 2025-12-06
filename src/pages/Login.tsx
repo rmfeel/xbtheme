@@ -1,59 +1,74 @@
-import React, { useState } from 'react';
-import { Form, Input, Button, Checkbox, Tabs, Divider, Typography } from 'antd';
-import { UserOutlined, LockOutlined, AlipayCircleOutlined, TaobaoCircleOutlined, WeiboCircleOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button, Checkbox, message, AutoComplete } from 'antd';
+import { LockOutlined, ThunderboltFilled, MailOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-
-const { Text } = Typography;
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
-    const [loginType, setLoginType] = useState<string>('account');
+    const [loading, setLoading] = useState(false);
+    const [greeting, setGreeting] = useState('');
+    const [emailOptions, setEmailOptions] = useState<{ value: string }[]>([]);
+
+    const EMAIL_SUFFIXES = ['qq.com', '163.com', 'gmail.com', 'icloud.com', 'outlook.com', 'yeah.com', 'proton.me', '139.com', 'sina.com', '126.com'];
+
+    const handleEmailChange = (value: string) => {
+        if (!value || value.includes('@')) {
+            setEmailOptions([]);
+        } else {
+            setEmailOptions(
+                EMAIL_SUFFIXES.map((suffix) => ({ value: `${value}@${suffix}` }))
+            );
+        }
+    };
+
+    useEffect(() => {
+        const hour = new Date().getHours();
+        if (hour < 6) setGreeting('夜深了');
+        else if (hour < 11) setGreeting('早上好');
+        else if (hour < 13) setGreeting('中午好');
+        else if (hour < 18) setGreeting('下午好');
+        else setGreeting('晚上好');
+    }, []);
 
     const onFinish = (values: any) => {
+        setLoading(true);
         console.log('Received values of form: ', values);
-        navigate('/dashboard');
+        setTimeout(() => {
+            setLoading(false);
+            message.success('登录成功');
+            navigate('/dashboard');
+        }, 800);
     };
 
     return (
         <div style={{
             minHeight: '100vh',
             display: 'flex',
-            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            background: '#f0f2f5',
-            backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
+            background: '#f5f7fa',
         }}>
-            {/* Header */}
-            <div style={{ marginBottom: 40, textAlign: 'center' }}>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12 }}>
-                    <img src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="logo" style={{ height: 44 }} />
-                    <span style={{ fontSize: 33, fontWeight: 600, color: 'rgba(0,0,0,0.88)' }}>Ant Design Pro</span>
-                </div>
-                <div style={{ marginTop: 12, color: 'rgba(0,0,0,0.45)', fontSize: 14 }}>
-                    Ant Design 是西湖区最具影响力的 Web 设计规范
-                </div>
-            </div>
-
-            {/* Login Card */}
             <div style={{
                 width: '100%',
-                maxWidth: 420,
-                padding: '32px 40px 24px',
+                maxWidth: 400,
                 background: '#fff',
-                borderRadius: 8,
-                boxShadow: '0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09)'
+                borderRadius: 4,
+                padding: '48px 40px',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
             }}>
-                <Tabs
-                    activeKey={loginType}
-                    onChange={setLoginType}
-                    centered
-                    items={[
-                        { key: 'account', label: '账户密码登录' },
-                        { key: 'mobile', label: '手机号登录' },
-                    ]}
-                    tabBarStyle={{ marginBottom: 24 }}
-                />
+                {/* Logo */}
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 32 }}>
+                    <ThunderboltFilled style={{ fontSize: 28, color: '#1890ff', marginRight: 12 }} />
+                    <span style={{ fontSize: 24, fontWeight: 700, color: '#333' }}>Xboard</span>
+                </div>
+
+                {/* Greeting */}
+                <div style={{ fontSize: 20, fontWeight: 600, color: '#1f1f1f', marginBottom: 8 }}>
+                    {greeting}，欢迎回来 👋
+                </div>
+                <div style={{ color: '#666', fontSize: 14, marginBottom: 32 }}>
+                    烟花易逝，人情长存。请登录。
+                </div>
 
                 <Form
                     name="login"
@@ -61,63 +76,59 @@ const Login: React.FC = () => {
                     onFinish={onFinish}
                     size="large"
                 >
-                    {loginType === 'account' && (
-                        <>
-                            <Form.Item
-                                name="username"
-                                rules={[{ required: true, message: '请输入用户名' }]}
-                            >
-                                <Input
-                                    prefix={<UserOutlined style={{ color: 'rgba(0,0,0,0.25)' }} />}
-                                    placeholder="用户名: admin or user"
-                                />
+                    <Form.Item
+                        name="username"
+                        rules={[{ required: true, message: '请输入账号' }]}
+                    >
+                        <AutoComplete
+                            options={emailOptions}
+                            onChange={handleEmailChange}
+                            placeholder="邮箱 / 用户名"
+                        >
+                            <Input prefix={<MailOutlined style={{ color: '#bfbfbf' }} />} />
+                        </AutoComplete>
+                    </Form.Item>
+
+                    <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: '请输入密码' }]}
+                    >
+                        <Input.Password
+                            prefix={<LockOutlined style={{ color: '#bfbfbf' }} />}
+                            placeholder="密码"
+                        />
+                    </Form.Item>
+
+                    <Form.Item>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Form.Item name="remember" valuePropName="checked" noStyle>
+                                <Checkbox>记住我</Checkbox>
                             </Form.Item>
-                            <Form.Item
-                                name="password"
-                                rules={[{ required: true, message: '请输入密码' }]}
+                            <a
+                                style={{ color: '#1890ff' }}
+                                onClick={() => navigate('/forgot-password')}
                             >
-                                <Input.Password
-                                    prefix={<LockOutlined style={{ color: 'rgba(0,0,0,0.25)' }} />}
-                                    placeholder="密码: ant.design"
-                                />
-                            </Form.Item>
-                        </>
-                    )}
+                                忘记密码?
+                            </a>
+                        </div>
+                    </Form.Item>
 
-                    {loginType === 'mobile' && (
-                        <Form.Item>
-                            <div style={{ textAlign: 'center', color: 'rgba(0,0,0,0.45)' }}>暂未实现</div>
-                        </Form.Item>
-                    )}
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 24 }}>
-                        <Form.Item name="remember" valuePropName="checked" noStyle>
-                            <Checkbox>自动登录</Checkbox>
-                        </Form.Item>
-                        <a style={{ color: '#1677ff' }}>忘记密码</a>
-                    </div>
-
-                    <Form.Item style={{ marginBottom: 24 }}>
-                        <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            block
+                            loading={loading}
+                        >
                             登 录
                         </Button>
                     </Form.Item>
 
-                    <div style={{ color: 'rgba(0,0,0,0.45)', fontSize: 14 }}>
-                        <Divider plain><Text type="secondary" style={{ fontSize: 14 }}>其他登录方式</Text></Divider>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: 24, paddingBottom: 12 }}>
-                            <AlipayCircleOutlined style={{ fontSize: 24, color: '#8c8c8c', cursor: 'pointer' }} className="hover:text-[#1890ff]" />
-                            <TaobaoCircleOutlined style={{ fontSize: 24, color: '#8c8c8c', cursor: 'pointer' }} className="hover:text-[#ff4d4f]" />
-                            <WeiboCircleOutlined style={{ fontSize: 24, color: '#8c8c8c', cursor: 'pointer' }} className="hover:text-[#faad14]" />
-                        </div>
-                        <div style={{ textAlign: 'center', marginTop: 16 }}>
-                            <a style={{ color: '#1677ff' }}>注册账户</a>
-                        </div>
+                    <div style={{ textAlign: 'center', color: '#999', fontSize: 14 }}>
+                        没有账号? <a onClick={() => navigate('/register')} style={{ color: '#1890ff' }}>注册新账户</a>
                     </div>
                 </Form>
             </div>
-
-
         </div>
     );
 };
