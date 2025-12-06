@@ -15,6 +15,7 @@ import {
   CloseOutlined,
 } from '@ant-design/icons';
 import './BasicLayout.css';
+import { BackgroundImage } from '../components/BackgroundImage';
 
 const { Header, Content, Footer } = Layout;
 
@@ -102,7 +103,8 @@ const BasicLayout = ({ children }: BasicLayoutProps) => {
 
 
   return (
-    <Layout className="basic-layout">
+    <Layout className="basic-layout" style={{ position: 'relative' }}>
+      <BackgroundImage fixed opacity={0.6} width="30%" maxWidth={400} />
       <Header className="layout-header">
         <div className="header-content">
           <div className="mobile-menu-btn" onClick={toggleMobileMenu}>

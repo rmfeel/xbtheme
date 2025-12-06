@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Form, Input, Button, message, AutoComplete } from 'antd';
 import { LockOutlined, MailOutlined, SafetyOutlined, TeamOutlined, ThunderboltFilled } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { getEmailOptions } from '../utils/emailUtils';
+import { BackgroundImage } from '../components/BackgroundImage';
 
 const Register: React.FC = () => {
     const navigate = useNavigate();
@@ -10,16 +12,8 @@ const Register: React.FC = () => {
     const [countdown, setCountdown] = useState(0);
     const [emailOptions, setEmailOptions] = useState<{ value: string }[]>([]);
 
-    const EMAIL_SUFFIXES = ['qq.com', '163.com', 'gmail.com', 'icloud.com', 'outlook.com', 'yeah.com', 'proton.me', '139.com', 'sina.com', '126.com'];
-
     const handleEmailChange = (value: string) => {
-        if (!value || value.includes('@')) {
-            setEmailOptions([]);
-        } else {
-            setEmailOptions(
-                EMAIL_SUFFIXES.map((suffix) => ({ value: `${value}@${suffix}` }))
-            );
-        }
+        setEmailOptions(getEmailOptions(value));
     };
 
     const onFinish = (values: any) => {
@@ -57,7 +51,10 @@ const Register: React.FC = () => {
             justifyContent: 'center',
             alignItems: 'center',
             background: '#f5f7fa',
+            position: 'relative',
+            overflow: 'hidden',
         }}>
+            <BackgroundImage />
             <div style={{
                 width: '100%',
                 maxWidth: 400,
