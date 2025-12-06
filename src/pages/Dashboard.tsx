@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, Row, Col, Progress, Button, Space, Typography, Avatar, Popconfirm, Tooltip, Tag } from 'antd';
 import type { CSSProperties } from 'react';
 import {
@@ -19,6 +20,7 @@ import {
   ReloadOutlined,
   BookFilled,
 } from '@ant-design/icons';
+import ImportModal from '../components/ImportModal';
 
 const { Title, Text } = Typography;
 
@@ -38,6 +40,7 @@ interface DocItem {
   tag?: string;
   time: string;
   iconBg: string;
+  onClick?: () => void;
 }
 
 // 常量配置
@@ -50,13 +53,18 @@ const COLORS = {
 
 const CARD_STYLE: CSSProperties = {
   height: '100%',
-  borderRadius: 4,
 };
 const ROW_GUTTER: [number, number] = [16, 16];
 const ROW_MARGIN_BOTTOM: CSSProperties = { marginBottom: 16 };
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  const onNavigate = (key: string) => {
+    navigate(`/${key}`);
+  };
   const [hitokoto, setHitokoto] = useState<string>(':D 获取中...');
+  const [isWindowsModalOpen, setIsWindowsModalOpen] = useState(false);
 
   // 获取一言
   useEffect(() => {
@@ -89,10 +97,11 @@ const Dashboard = () => {
       {
         icon: WindowsOutlined,
         title: 'Windows',
-        description: '那是一种内在的东西，他们到达不了，也无法触及的',
-        tag: '科学搬砖组',
+        description: '“Clash Verge Rev 是唯一的首选',
+        tag: '管理员',
         time: '8 年前',
         iconBg: '#1677ff',
+        onClick: () => onNavigate?.('windows-doc'),
       },
       {
         icon: AppleOutlined,
@@ -135,8 +144,18 @@ const Dashboard = () => {
         iconBg: '#13c2c2',
       },
     ],
-    []
+    [onNavigate]
   );
+
+  // 获取时间段问候语
+  const getTimeState = () => {
+    const hour = new Date().getHours();
+    if (hour < 6) return '早点睡';
+    if (hour < 11) return '早上好';
+    if (hour < 13) return '中午好';
+    if (hour < 17) return '下午好';
+    return '晚上好';
+  };
 
   return (
     <div style={{ paddingTop: 32 }}>
@@ -152,7 +171,7 @@ const Dashboard = () => {
               />
               <Space orientation="vertical" size={4}>
                 <Title level={4} style={{ margin: 0, fontWeight: 600, fontSize: 18 }}>
-                  早安,吴彦祖,祝你开心每一天!
+                  {getTimeState()}, 吴彦祖, 欢迎回到本站！👋
                 </Title>
                 <Text type="secondary" style={{ fontSize: 13 }}>
                   {hitokoto}
@@ -223,8 +242,8 @@ const Dashboard = () => {
                   <span style={{ color: COLORS.success, fontSize: 28, fontWeight: 700 }}>Ultimate</span>
                 </div>
                 <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
-                  <Tag bordered={false} color="success">企业版</Tag>
-                  <Tag bordered={false} color="default">无限速</Tag>
+                  <Tag variant="filled" color="success">企业版</Tag>
+                  <Tag variant="filled" color="default">无限速</Tag>
                 </div>
               </div>
               <GiftFilled style={{ fontSize: 48, color: COLORS.success, opacity: 0.6 }} />
@@ -286,6 +305,11 @@ const Dashboard = () => {
                           alignItems: 'center',
                           justifyContent: 'center',
                         }}
+                        onClick={() => {
+                          if (platform.key === 'windows') {
+                            setIsWindowsModalOpen(true);
+                          }
+                        }}
                       >
                         <IconComponent style={{ fontSize: 24 }} />
                         <Text style={{ marginTop: 8 }}>{platform.name}</Text>
@@ -342,6 +366,7 @@ const Dashboard = () => {
                         marginLeft: index % 3 === 0 ? 0 : -1,
                         marginTop: index >= 3 ? -1 : 0,
                       }}
+                      onClick={item.onClick}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
                         e.currentTarget.style.borderColor = '#d9d9d9';
@@ -394,6 +419,10 @@ const Dashboard = () => {
           </Card>
         </Col>
       </Row>
+      <ImportModal
+        open={isWindowsModalOpen}
+        onCancel={() => setIsWindowsModalOpen(false)}
+      />
     </div>
   );
 };

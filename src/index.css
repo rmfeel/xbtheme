@@ -1,3 +1,17 @@
+/* Always show scrollbar to prevent layout shift when modal opens */
+html {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+}
+
+/* Hide scrollbar for Chrome/Safari/Opera */
+html::-webkit-scrollbar {
+  display: none;
+}
+
 * {
   margin: 0;
   padding: 0;

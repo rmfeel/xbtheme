@@ -1,5 +1,6 @@
 import { useMemo, ReactNode, useState } from 'react';
-import { Layout, Menu, Avatar, Dropdown, Space, Drawer, Button, Breadcrumb } from 'antd';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Layout, Menu, Avatar, Dropdown, Space, Button, Breadcrumb } from 'antd';
 import type { MenuProps } from 'antd';
 import {
   DashboardOutlined,
@@ -11,21 +12,29 @@ import {
   SettingOutlined,
   MenuOutlined,
   HomeOutlined,
+  CloseOutlined,
 } from '@ant-design/icons';
 import './BasicLayout.css';
 
 const { Header, Content, Footer } = Layout;
 
-type MenuKey = 'dashboard' | 'purchase' | 'nodes' | 'tickets';
+type MenuKey = 'dashboard' | 'plan' | 'node' | 'ticket' | 'doc' | 'knowledge' | 'invite' | 'profile' | 'traffic' | 'orders' | 'giftcard';
 
 interface BasicLayoutProps {
   children: ReactNode;
-  currentPage: MenuKey;
-  onPageChange: (page: MenuKey) => void;
 }
 
-const BasicLayout = ({ children, currentPage, onPageChange }: BasicLayoutProps) => {
-  const [drawerVisible, setDrawerVisible] = useState(false);
+const BasicLayout = ({ children }: BasicLayoutProps) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const currentPage = (location.pathname.substring(1) || 'dashboard') as MenuKey;
+
+  const onPageChange = (key: MenuKey) => {
+    navigate(`/${key}`);
+    setMobileMenuOpen(false);
+  };
 
   const userMenuItems: MenuProps['items'] = [
     {
@@ -50,17 +59,21 @@ const BasicLayout = ({ children, currentPage, onPageChange }: BasicLayoutProps) 
 
   const handleUserMenuClick: MenuProps['onClick'] = ({ key }) => {
     if (key === 'logout') {
-      console.log('退出登录');
+      // Handle logout
     } else if (key === 'profile') {
-      console.log('个人中心');
+      onPageChange('profile');
     } else if (key === 'settings') {
-      console.log('个人设置');
+      onPageChange('profile');
     }
   };
 
-  const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
-    onPageChange(key as MenuKey);
-    setDrawerVisible(false);
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+    if (!mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
   };
 
   const menuItems: MenuProps['items'] = [
@@ -70,17 +83,17 @@ const BasicLayout = ({ children, currentPage, onPageChange }: BasicLayoutProps) 
       label: '仪表盘',
     },
     {
-      key: 'purchase',
+      key: 'plan',
       icon: <ShoppingCartOutlined />,
-      label: '购买套餐',
+      label: '购买订阅',
     },
     {
-      key: 'nodes',
+      key: 'node',
       icon: <ClusterOutlined />,
       label: '节点列表',
     },
     {
-      key: 'tickets',
+      key: 'ticket',
       icon: <CustomerServiceOutlined />,
       label: '工单',
     },
@@ -88,101 +101,168 @@ const BasicLayout = ({ children, currentPage, onPageChange }: BasicLayoutProps) 
 
   const menuMap: Record<MenuKey, string> = {
     dashboard: '仪表盘',
-    purchase: '购买套餐',
-    nodes: '节点列表',
-    tickets: '工单',
+    plan: '购买订阅',
+    node: '节点列表',
+    ticket: '工单',
+    doc: '使用文档',
+    knowledge: '知识库',
+    invite: '邀请返佣',
+    profile: '个人中心',
+    traffic: '流量明细',
+    orders: '我的订单',
+    giftcard: '礼品卡',
   };
 
   const breadcrumbItems = useMemo(() => {
-    return [
+    const items = [
       {
-        href: '/',
-        title: (
-          <>
-            <HomeOutlined />
-            <span>首页</span>
-          </>
-        ),
-      },
-      {
-        title: menuMap[currentPage] || '仪表盘',
+        title: <a href="#" onClick={(e) => { e.preventDefault(); onPageChange('dashboard'); }}>首页</a>,
       },
     ];
+
+    if (currentPage !== 'dashboard' && menuMap[currentPage]) {
+      items.push({
+        title: <span>{menuMap[currentPage]}</span>,
+      });
+    }
+
+    return items;
   }, [currentPage]);
 
   return (
     <Layout className="basic-layout">
       <Header className="layout-header">
         <div className="header-content">
-          <Button
-            type="text"
-            icon={<MenuOutlined />}
-            onClick={() => setDrawerVisible(true)}
-            className="mobile-menu-btn"
-          />
-          <div className="logo">
-            <img
-              src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
-              alt="logo"
-            />
-            <span className="logo-title">Ant Design Pro</span>
+          <div className="mobile-menu-btn" onClick={toggleMobileMenu}>
+            {mobileMenuOpen ? <CloseOutlined /> : <MenuOutlined />}
           </div>
+
+          <div className="logo" onClick={() => onPageChange('dashboard')}>
+            <img src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="logo" />
+            <span className="logo-title">Enterprise</span>
+          </div>
+
           <Menu
-            theme="light"
             mode="horizontal"
             selectedKeys={[currentPage]}
             items={menuItems}
-            onClick={handleMenuClick}
             className="header-menu desktop-menu"
+            onClick={({ key }) => onPageChange(key as MenuKey)}
           />
-          <Dropdown
-            menu={{
-              items: userMenuItems,
-              onClick: handleUserMenuClick,
-            }}
-            placement="bottomRight"
-          >
-            <Space className="user-info" style={{ cursor: 'pointer' }}>
-              <Avatar
-                size="small"
-                src="https://api.dicebear.com/7.x/miniavs/svg?seed=1"
-                icon={<UserOutlined />}
-              />
-              <span className="user-name">管理员</span>
-            </Space>
-          </Dropdown>
+
+          <div className="user-info">
+            <Dropdown menu={{ items: userMenuItems, onClick: handleUserMenuClick }}>
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <Avatar size="small" icon={<UserOutlined />} />
+                  <span className="user-name">Admin User</span>
+                </Space>
+              </a>
+            </Dropdown>
+          </div>
         </div>
       </Header>
-      <Drawer
-        title="菜单"
-        placement="left"
-        onClose={() => setDrawerVisible(false)}
-        open={drawerVisible}
-        className="mobile-drawer"
-      >
-        <Menu
-          mode="vertical"
-          selectedKeys={[currentPage]}
-          items={menuItems}
-          onClick={handleMenuClick}
-        />
-      </Drawer>
+
+      {/* Mobile Menu Backdrop */}
+      <div
+        id="menu-backdrop"
+        className={mobileMenuOpen ? 'open' : 'closed'}
+        onClick={toggleMobileMenu}
+      />
+
+      {/* Mobile Menu Panel */}
+      <div id="mobile-menu-panel" className={mobileMenuOpen ? 'open' : 'closed'}>
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid #f0f0f0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{
+                width: 40, height: 40, borderRadius: '50%', background: '#f5f5f5',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#bfbfbf', border: '1px solid #e8e8e8'
+              }}>
+                <UserOutlined style={{ fontSize: 20 }} />
+              </div>
+              <div>
+                <div style={{ fontWeight: 600, fontSize: 14, color: 'rgba(0,0,0,0.88)' }}>Admin</div>
+                <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)', fontFamily: 'monospace' }}>¥ 1,280.00</div>
+              </div>
+            </div>
+            <Button size="small" style={{ fontSize: 12, color: '#1677ff', borderColor: '#1677ff' }}>充值</Button>
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', padding: '8px 0' }}>
+          <div className="menu-grid-item" onClick={() => onPageChange('node')}>
+            <ClusterOutlined style={{ fontSize: 24, color: '#8c8c8c' }} />
+            <span style={{ fontSize: 12, color: 'rgba(0,0,0,0.88)' }}>节点列表</span>
+          </div>
+          <div className="menu-grid-item" onClick={() => onPageChange('plan')}>
+            <ShoppingCartOutlined style={{ fontSize: 24, color: '#8c8c8c' }} />
+            <span style={{ fontSize: 12, color: 'rgba(0,0,0,0.88)' }}>我的套餐</span>
+          </div>
+          <div className="menu-grid-item" onClick={() => onPageChange('traffic')}>
+            <DashboardOutlined style={{ fontSize: 24, color: '#8c8c8c' }} />
+            <span style={{ fontSize: 12, color: 'rgba(0,0,0,0.88)' }}>流量明细</span>
+          </div>
+          <div className="menu-grid-item" onClick={() => onPageChange('orders')}>
+            <MenuOutlined style={{ fontSize: 24, color: '#8c8c8c' }} />
+            <span style={{ fontSize: 12, color: 'rgba(0,0,0,0.88)' }}>我的订单</span>
+          </div>
+          <div className="menu-grid-item" onClick={() => onPageChange('giftcard')}>
+            <ShoppingCartOutlined style={{ fontSize: 24, color: '#8c8c8c' }} />
+            <span style={{ fontSize: 12, color: 'rgba(0,0,0,0.88)' }}>礼品卡</span>
+          </div>
+          <div className="menu-grid-item" onClick={() => onPageChange('invite')}>
+            <UserOutlined style={{ fontSize: 24, color: '#8c8c8c' }} />
+            <span style={{ fontSize: 12, color: 'rgba(0,0,0,0.88)' }}>邀请返佣</span>
+          </div>
+          <div className="menu-grid-item" onClick={() => onPageChange('ticket')}>
+            <CustomerServiceOutlined style={{ fontSize: 24, color: '#8c8c8c' }} />
+            <span style={{ fontSize: 12, color: 'rgba(0,0,0,0.88)' }}>工单</span>
+          </div>
+          <div className="menu-grid-item" onClick={() => onPageChange('doc')}>
+            <HomeOutlined style={{ fontSize: 24, color: '#8c8c8c' }} />
+            <span style={{ fontSize: 12, color: 'rgba(0,0,0,0.88)' }}>文档</span>
+          </div>
+          <div className="menu-grid-item" onClick={() => onPageChange('profile')}>
+            <UserOutlined style={{ fontSize: 24, color: '#8c8c8c' }} />
+            <span style={{ fontSize: 12, color: 'rgba(0,0,0,0.88)' }}>个人中心</span>
+          </div>
+        </div>
+
+        <div style={{ borderTop: '1px solid #f0f0f0' }}>
+          <div
+            style={{
+              padding: '16px', textAlign: 'center', color: '#ff4d4f', fontSize: 14,
+              cursor: 'pointer', transition: 'background 0.2s'
+            }}
+            className="hover:bg-gray-50"
+          >
+            退出登录
+          </div>
+        </div>
+      </div>
+
       <div className="breadcrumb-wrapper">
         <div className="breadcrumb-content">
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
-      <Content className="layout-content">{children}</Content>
+
+      <Content className="layout-content">
+        {children}
+      </Content>
       <Footer className="layout-footer">
         <div className="footer-nav">
-          <a href="#">节点</a>
-          <a href="#">套餐</a>
-          <a href="#">工单</a>
-          <a href="#">礼品卡</a>
-          <a href="#">流量明细</a>
-          <a href="#">邀请</a>
-          <a href="#">订单</a>
-          <a href="#">个人中心</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); onPageChange('node'); }}>节点</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); onPageChange('plan'); }}>套餐</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); onPageChange('ticket'); }}>工单</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); onPageChange('knowledge'); }}>文档</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); onPageChange('giftcard'); }}>礼品卡</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); onPageChange('traffic'); }}>流量明细</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); onPageChange('invite'); }}>邀请</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); onPageChange('orders'); }}>订单</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); onPageChange('profile'); }}>个人中心</a>
         </div>
         <div className="footer-copyright">
           Copyright © 2025 Xborad Inc. All rights reserved.

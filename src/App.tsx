@@ -1,32 +1,23 @@
-import { useState } from 'react';
 import { ConfigProvider } from 'antd';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import zhCN from 'antd/locale/zh_CN';
 import BasicLayout from './layouts/BasicLayout';
 import Dashboard from './pages/Dashboard';
-import Purchase from './pages/Purchase';
-import Nodes from './pages/Nodes';
-import Tickets from './pages/Tickets';
+import Plan from './pages/Plan';
+import Node from './pages/Node';
+import Ticket from './pages/Ticket';
+import Doc from './pages/Doc';
+import Knowledge from './pages/Knowledge';
+import Invite from './pages/Invite';
+import Login from './pages/Login';
+import Profile from './pages/Profile';
+import Traffic from './pages/Traffic';
+import Orders from './pages/Orders';
+import GiftCard from './pages/GiftCard';
 
-type PageKey = 'dashboard' | 'purchase' | 'nodes' | 'tickets';
+
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<PageKey>('dashboard');
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'purchase':
-        return <Purchase />;
-      case 'nodes':
-        return <Nodes />;
-      case 'tickets':
-        return <Tickets />;
-      default:
-        return <Dashboard />;
-    }
-  };
-
   return (
     <ConfigProvider
       locale={zhCN}
@@ -37,9 +28,32 @@ function App() {
         },
       }}
     >
-      <BasicLayout currentPage={currentPage} onPageChange={setCurrentPage}>
-        {renderPage()}
-      </BasicLayout>
+      <BrowserRouter basename="/xbtheme">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/*"
+            element={
+              <BasicLayout>
+                <Routes>
+                  <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/plan" element={<Plan />} />
+                  <Route path="/node" element={<Node />} />
+                  <Route path="/ticket" element={<Ticket />} />
+                  <Route path="/knowledge" element={<Knowledge />} />
+                  <Route path="/doc" element={<Doc />} />
+                  <Route path="/invite" element={<Invite />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/traffic" element={<Traffic />} />
+                  <Route path="/orders" element={<Orders />} />
+                  <Route path="/giftcard" element={<GiftCard />} />
+                </Routes>
+              </BasicLayout>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </ConfigProvider>
   );
 }

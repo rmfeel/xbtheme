@@ -1,0 +1,176 @@
+/* Standard Modal Background */
+.windows-import-modal .ant-modal-content {
+    background: #ffffff !important;
+    border-radius: 4px !important;
+    padding: 0 !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+}
+
+.windows-import-modal-body {
+    padding: 24px;
+    background: #ffffff;
+}
+
+/* Header Section */
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.88);
+    margin: 0;
+}
+
+.header-subtitle {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+    margin-top: 4px;
+}
+
+.header-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #52c41a;
+}
+
+/* Client Card Grid */
+.client-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.client-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100px;
+    padding: 16px;
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.client-card:hover {
+    border-color: #1677ff;
+}
+
+.client-card.hiddify:hover {
+    border-color: #fa8c16;
+}
+
+.client-card.mihomo:hover {
+    border-color: #eb2f96;
+}
+
+.client-card.v2rayn:hover {
+    border-color: #722ed1;
+}
+
+.card-icon-wrapper {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.client-card.verge .card-icon-wrapper {
+    background-color: #e6f4ff;
+    color: #1677ff;
+}
+
+.client-card.hiddify .card-icon-wrapper {
+    background-color: #fff7e6;
+    color: #fa8c16;
+}
+
+.client-card.mihomo .card-icon-wrapper {
+    background-color: #fff0f6;
+    color: #eb2f96;
+}
+
+.client-card.v2rayn .card-icon-wrapper {
+    background-color: #f9f0ff;
+    color: #722ed1;
+}
+
+.card-info {
+    margin-top: auto;
+}
+
+.card-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.88);
+    transition: color 0.2s;
+}
+
+.client-card.verge:hover .card-name {
+    color: #1677ff;
+}
+
+.client-card.hiddify:hover .card-name {
+    color: #fa8c16;
+}
+
+.client-card.mihomo:hover .card-name {
+    color: #eb2f96;
+}
+
+.client-card.v2rayn:hover .card-name {
+    color: #722ed1;
+}
+
+.card-desc {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+    margin-top: 2px;
+}
+
+/* Footer Action */
+.modal-footer-action {
+    text-align: center;
+    padding-top: 8px;
+}
+
+.copy-link {
+    display: inline-block;
+    font-size: 12px;
+    color: #1677ff;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.copy-link:hover {
+    color: #4096ff;
+}
